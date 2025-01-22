@@ -21,7 +21,6 @@ const typeDefs = gql`
   type Query {
     getPokemon(nameOrId: String!): Pokemon
     listPokemon(limit: Int, offset: Int): [Pokemon]
-    getPokemonByType(type: String!): [Pokemon]
   }
 `;
 
@@ -49,27 +48,6 @@ const resolvers = {
 
       const promises = data.results.map(async (pokemon) => {
         const pokemonResponse = await fetch(pokemon.url);
-        const pokemonData = await pokemonResponse.json();
-        return {
-          id: pokemonData.id,
-          name: pokemonData.name,
-          height: pokemonData.height,
-          weight: pokemonData.weight,
-          abilities: pokemonData.abilities.map((ability) => ({ name: ability.ability.name })),
-        };
-      });
-
-      return Promise.all(promises);
-    },
-    async getPokemonByType(_, { type }) {
-      const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
-      if (!response.ok) {
-        throw new Error('Type not found');
-      }
-      const data = await response.json();
-
-      const promises = data.pokemon.map(async (pokemonEntry) => {
-        const pokemonResponse = await fetch(pokemonEntry.pokemon.url);
         const pokemonData = await pokemonResponse.json();
         return {
           id: pokemonData.id,
