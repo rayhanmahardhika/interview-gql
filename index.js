@@ -86,7 +86,7 @@ const resolvers = {
 };
 
 // Create an Apollo Server instance
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers, introspection: true });
 
 // Apply Apollo middleware to Express app
 async function startServer() {
